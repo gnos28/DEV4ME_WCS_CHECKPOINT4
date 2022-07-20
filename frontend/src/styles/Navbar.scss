@@ -1,0 +1,41 @@
+@import "./_variables.scss";
+
+nav.navbar {
+  margin: 5px 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: $navbar-height-mobile;
+  display: flex;
+  align-items: center;
+
+  & a > img {
+    height: clamp(25px, 9vw, $navbar-height-mobile);
+    filter: grayscale(0.6);
+    margin: 0 5px;
+  }
+
+  & a > img:hover {
+    filter: grayscale(0.2);
+  }
+}
+
+@media screen and (min-width: 500px) {
+  nav.navbar {
+    position: fixed;
+    top: $header-height-desktop;
+    left: 0;
+    right: auto;
+    margin: 0;
+    height: calc(100vh - $header-height-desktop);
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    // box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    //   rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
+    & a > img {
+      height: 50px;
+    }
+  }
+}
