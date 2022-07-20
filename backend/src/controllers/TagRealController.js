@@ -1,9 +1,8 @@
 const models = require("../models");
-const { hashPassword } = require("../helpers/argonHelper");
 
-class UserController {
+class TagRealManager {
   static browse = (req, res) => {
-    models.user
+    models.tag_real
       .findAll()
       .then(([rows]) => {
         res.send(rows);
@@ -15,7 +14,7 @@ class UserController {
   };
 
   static read = (req, res) => {
-    models.user
+    models.tag_real
       .find(req.params.id)
       .then(([rows]) => {
         res.send(rows);
@@ -27,46 +26,37 @@ class UserController {
   };
 
   static add = (req, res) => {
-    const newUser = req.body;
+    const newTagReal = req.body;
 
-    const validationErrors = models.user.validate(newUser);
+    const validationErrors = models.tag_real.validate(newTagReal);
     if (validationErrors) {
       console.error(validationErrors);
       return res.status(422).json({ validationErrors });
     }
 
-    hashPassword(newUser.password).then((hash) => {
-      delete newUser.password;
-
-      models.user
-        .insert({ ...newUser, password_hash: hash })
-        .then(([result]) => {
-          res.status(201).send({ ...newUser, id: result.insertId });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.sendStatus(500);
-        });
-    });
+    models.tag_real
+      .insert(newTagReal)
+      .then(([result]) => {
+        res.status(201).send({ ...newTagReal, id: result.insertId });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
     return true;
   };
 
   static modify = async (req, res) => {
-    const newUser = req.body;
+    const newTagReal = req.body;
 
-    if (newUser.password) {
-      newUser.password_hash = await hashPassword(newUser.password);
-      delete newUser.password;
-    }
-    const validationErrors = models.user.validate(newUser, false);
+    const validationErrors = models.tag_real.validate(newTagReal, false);
     if (validationErrors) res.status(422).json({ validationErrors });
     else {
-      models.user
-        .update(newUser, req.params.id)
+      models.tag_real
+        .update(newTagReal, req.params.id)
         .then(([result]) => {
           if (result.affectedRows === 0) throw new Error("no change affected");
-          delete newUser.password_hash;
-          res.status(201).send({ ...newUser });
+          res.status(201).send({ ...newTagReal });
         })
         .catch((err) => {
           console.error(err);
@@ -76,7 +66,7 @@ class UserController {
   };
 
   static delete = async (req, res) => {
-    models.user
+    models.tag_real
       .delete(req.params.id)
       .then(() => {
         res.sendStatus(204);
@@ -88,4 +78,4 @@ class UserController {
   };
 }
 
-module.exports = UserController;
+module.exports = TagRealManager;

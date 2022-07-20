@@ -28,8 +28,18 @@ app.use(express.static(path.join(__dirname, "..", "..", "frontend", "dist")));
 
 const router = express.Router();
 const userRouter = require("./routes/userRouter");
+const realRouter = require("./routes/realRouter");
+const tagRouter = require("./routes/tagRouter");
+const tagRealRouter = require("./routes/tagRealRouter");
+const mediaRouter = require("./routes/mediaRouter");
+const authRouter = require("./routes/authRouter");
 
 router.use("/user", auth, userRouter);
+router.use("/real", auth, realRouter);
+router.use("/tag", auth, tagRouter);
+router.use("/tagreal", auth, tagRealRouter);
+router.use("/media", auth, mediaRouter);
+router.use("/auth", authRouter);
 
 // API routes
 app.use("/api", router);

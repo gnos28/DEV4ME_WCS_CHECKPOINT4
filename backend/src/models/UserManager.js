@@ -8,12 +8,10 @@ class UserManager extends AbstractManager {
     this.presence = forCreation ? "required" : "optional";
 
     const joiObject = {
-      name: Joi.string().max(80).presence(this.presence),
-      email: Joi.string().email().min(5).max(50).presence(this.presence),
-      phone_number: Joi.string().max(20).presence(this.presence),
-      is_plant_admin: Joi.bool().presence(this.presence),
-      is_super_admin: Joi.bool().presence(this.presence),
-      plant_id: Joi.number().presence(this.presence),
+      firstname: Joi.string().max(128).presence(this.presence),
+      lastname: Joi.string().max(128).presence(this.presence),
+      is_admin: Joi.bool().presence(this.presence),
+      email: Joi.string().email().min(5).max(255).presence(this.presence),
     };
 
     if (forCreation)
@@ -26,15 +24,13 @@ class UserManager extends AbstractManager {
 
   insert(user) {
     return this.connection.query(
-      `insert into ${UserManager.table} (name, email, password_hash, phone_number, is_plant_admin, plant_id, is_super_admin) values (?, ?, ?, ?, ?, ?, ?)`,
+      `insert into ${UserManager.table} (firstname, lastname, email, password_hash, is_admin) values (?, ?, ?, ?, ?)`,
       [
-        user.name,
+        user.firstname,
+        user.lastname,
         user.email,
         user.password_hash,
-        user.phone_number,
-        user.is_plant_admin,
-        user.plant_id,
-        user.is_super_admin,
+        user.is_admin,
       ]
     );
   }
@@ -57,13 +53,6 @@ class UserManager extends AbstractManager {
       user,
       id,
     ]);
-  }
-
-  findByPlantId(plantId) {
-    return this.connection.query(
-      `select * from  ${this.table} where plant_id = ?`,
-      [plantId]
-    );
   }
 }
 

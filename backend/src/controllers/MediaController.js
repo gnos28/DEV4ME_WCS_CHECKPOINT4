@@ -1,9 +1,8 @@
 const models = require("../models");
-const { hashPassword } = require("../helpers/argonHelper");
 
-class UserController {
+class MediaManager {
   static browse = (req, res) => {
-    models.user
+    models.media
       .findAll()
       .then(([rows]) => {
         res.send(rows);
@@ -15,7 +14,7 @@ class UserController {
   };
 
   static read = (req, res) => {
-    models.user
+    models.media
       .find(req.params.id)
       .then(([rows]) => {
         res.send(rows);
@@ -27,46 +26,37 @@ class UserController {
   };
 
   static add = (req, res) => {
-    const newUser = req.body;
+    const newMedia = req.body;
 
-    const validationErrors = models.user.validate(newUser);
+    const validationErrors = models.media.validate(newMedia);
     if (validationErrors) {
       console.error(validationErrors);
       return res.status(422).json({ validationErrors });
     }
 
-    hashPassword(newUser.password).then((hash) => {
-      delete newUser.password;
-
-      models.user
-        .insert({ ...newUser, password_hash: hash })
-        .then(([result]) => {
-          res.status(201).send({ ...newUser, id: result.insertId });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.sendStatus(500);
-        });
-    });
+    models.media
+      .insert(newMedia)
+      .then(([result]) => {
+        res.status(201).send({ ...newMedia, id: result.insertId });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
     return true;
   };
 
   static modify = async (req, res) => {
-    const newUser = req.body;
+    const newMedia = req.body;
 
-    if (newUser.password) {
-      newUser.password_hash = await hashPassword(newUser.password);
-      delete newUser.password;
-    }
-    const validationErrors = models.user.validate(newUser, false);
+    const validationErrors = models.media.validate(newMedia, false);
     if (validationErrors) res.status(422).json({ validationErrors });
     else {
-      models.user
-        .update(newUser, req.params.id)
+      models.media
+        .update(newMedia, req.params.id)
         .then(([result]) => {
           if (result.affectedRows === 0) throw new Error("no change affected");
-          delete newUser.password_hash;
-          res.status(201).send({ ...newUser });
+          res.status(201).send({ ...newMedia });
         })
         .catch((err) => {
           console.error(err);
@@ -76,7 +66,7 @@ class UserController {
   };
 
   static delete = async (req, res) => {
-    models.user
+    models.media
       .delete(req.params.id)
       .then(() => {
         res.sendStatus(204);
@@ -88,4 +78,4 @@ class UserController {
   };
 }
 
-module.exports = UserController;
+module.exports = MediaManager;
