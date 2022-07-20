@@ -1,8 +1,8 @@
 const models = require("../models");
 
-class RealManager {
+class TagRealManager {
   static browse = (req, res) => {
-    models.real
+    models.tag_real
       .findAll()
       .then(([rows]) => {
         res.send(rows);
@@ -14,7 +14,7 @@ class RealManager {
   };
 
   static read = (req, res) => {
-    models.real
+    models.tag_real
       .find(req.params.id)
       .then(([rows]) => {
         res.send(rows);
@@ -26,18 +26,18 @@ class RealManager {
   };
 
   static add = (req, res) => {
-    const newReal = req.body;
+    const newTagReal = req.body;
 
-    const validationErrors = models.real.validate(newReal);
+    const validationErrors = models.tag_real.validate(newTagReal);
     if (validationErrors) {
       console.error(validationErrors);
       return res.status(422).json({ validationErrors });
     }
 
-    models.real
-      .insert(newReal)
+    models.tag_real
+      .insert(newTagReal)
       .then(([result]) => {
-        res.status(201).send({ ...newReal, id: result.insertId });
+        res.status(201).send({ ...newTagReal, id: result.insertId });
       })
       .catch((err) => {
         console.error(err);
@@ -47,16 +47,16 @@ class RealManager {
   };
 
   static modify = async (req, res) => {
-    const newReal = req.body;
+    const newTagReal = req.body;
 
-    const validationErrors = models.real.validate(newReal, false);
+    const validationErrors = models.tag_real.validate(newTagReal, false);
     if (validationErrors) res.status(422).json({ validationErrors });
     else {
-      models.real
-        .update(newReal, req.params.id)
+      models.tag_real
+        .update(newTagReal, req.params.id)
         .then(([result]) => {
           if (result.affectedRows === 0) throw new Error("no change affected");
-          res.status(201).send({ ...newReal });
+          res.status(201).send({ ...newTagReal });
         })
         .catch((err) => {
           console.error(err);
@@ -66,7 +66,7 @@ class RealManager {
   };
 
   static delete = async (req, res) => {
-    models.real
+    models.tag_real
       .delete(req.params.id)
       .then(() => {
         res.sendStatus(204);
@@ -78,4 +78,4 @@ class RealManager {
   };
 }
 
-module.exports = RealManager;
+module.exports = TagRealManager;

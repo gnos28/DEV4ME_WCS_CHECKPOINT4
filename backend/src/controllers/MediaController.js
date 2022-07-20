@@ -1,8 +1,8 @@
 const models = require("../models");
 
-class RealManager {
+class MediaManager {
   static browse = (req, res) => {
-    models.real
+    models.media
       .findAll()
       .then(([rows]) => {
         res.send(rows);
@@ -14,7 +14,7 @@ class RealManager {
   };
 
   static read = (req, res) => {
-    models.real
+    models.media
       .find(req.params.id)
       .then(([rows]) => {
         res.send(rows);
@@ -26,18 +26,18 @@ class RealManager {
   };
 
   static add = (req, res) => {
-    const newReal = req.body;
+    const newMedia = req.body;
 
-    const validationErrors = models.real.validate(newReal);
+    const validationErrors = models.media.validate(newMedia);
     if (validationErrors) {
       console.error(validationErrors);
       return res.status(422).json({ validationErrors });
     }
 
-    models.real
-      .insert(newReal)
+    models.media
+      .insert(newMedia)
       .then(([result]) => {
-        res.status(201).send({ ...newReal, id: result.insertId });
+        res.status(201).send({ ...newMedia, id: result.insertId });
       })
       .catch((err) => {
         console.error(err);
@@ -47,16 +47,16 @@ class RealManager {
   };
 
   static modify = async (req, res) => {
-    const newReal = req.body;
+    const newMedia = req.body;
 
-    const validationErrors = models.real.validate(newReal, false);
+    const validationErrors = models.media.validate(newMedia, false);
     if (validationErrors) res.status(422).json({ validationErrors });
     else {
-      models.real
-        .update(newReal, req.params.id)
+      models.media
+        .update(newMedia, req.params.id)
         .then(([result]) => {
           if (result.affectedRows === 0) throw new Error("no change affected");
-          res.status(201).send({ ...newReal });
+          res.status(201).send({ ...newMedia });
         })
         .catch((err) => {
           console.error(err);
@@ -66,7 +66,7 @@ class RealManager {
   };
 
   static delete = async (req, res) => {
-    models.real
+    models.media
       .delete(req.params.id)
       .then(() => {
         res.sendStatus(204);
@@ -78,4 +78,4 @@ class RealManager {
   };
 }
 
-module.exports = RealManager;
+module.exports = MediaManager;
