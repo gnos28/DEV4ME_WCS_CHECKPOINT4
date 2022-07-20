@@ -1,0 +1,24 @@
+@import "./_variables.scss";
+
+.App {
+  text-align: center;
+}
+
+section > div {
+  min-height: calc(100vh - $header-height-mobile - $footer-height);
+  background-color: $light-background;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+@media screen and (min-width: 500px) {
+  section {
+    position: relative;
+    left: $navbar-width-desktop;
+    width: calc(100vw - $navbar-width-desktop);
+
+    & > div {
+      min-height: calc(100vh - $header-height-desktop - $footer-height);
+    }
+  }
+}
