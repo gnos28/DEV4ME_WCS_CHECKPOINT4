@@ -1,9 +1,8 @@
 const models = require("../models");
-const { hashPassword } = require("../helpers/argonHelper");
 
-class UserController {
+class RealManager {
   static browse = (req, res) => {
-    models.user
+    models.real
       .findAll()
       .then(([rows]) => {
         res.send(rows);
@@ -15,7 +14,7 @@ class UserController {
   };
 
   static read = (req, res) => {
-    models.user
+    models.real
       .find(req.params.id)
       .then(([rows]) => {
         res.send(rows);
@@ -29,43 +28,34 @@ class UserController {
   static add = (req, res) => {
     const newUser = req.body;
 
-    const validationErrors = models.user.validate(newUser);
+    const validationErrors = models.real.validate(newUser);
     if (validationErrors) {
       console.error(validationErrors);
       return res.status(422).json({ validationErrors });
     }
 
-    hashPassword(newUser.password).then((hash) => {
-      delete newUser.password;
-
-      models.user
-        .insert({ ...newUser, password_hash: hash })
-        .then(([result]) => {
-          res.status(201).send({ ...newUser, id: result.insertId });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.sendStatus(500);
-        });
-    });
+    models.real
+      .insert(newUser)
+      .then(([result]) => {
+        res.status(201).send({ ...newUser, id: result.insertId });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
     return true;
   };
 
   static modify = async (req, res) => {
     const newUser = req.body;
 
-    if (newUser.password) {
-      newUser.password_hash = await hashPassword(newUser.password);
-      delete newUser.password;
-    }
-    const validationErrors = models.user.validate(newUser, false);
+    const validationErrors = models.real.validate(newUser, false);
     if (validationErrors) res.status(422).json({ validationErrors });
     else {
-      models.user
+      models.real
         .update(newUser, req.params.id)
         .then(([result]) => {
           if (result.affectedRows === 0) throw new Error("no change affected");
-          delete newUser.password_hash;
           res.status(201).send({ ...newUser });
         })
         .catch((err) => {
@@ -76,7 +66,7 @@ class UserController {
   };
 
   static delete = async (req, res) => {
-    models.user
+    models.real
       .delete(req.params.id)
       .then(() => {
         res.sendStatus(204);
@@ -88,4 +78,4 @@ class UserController {
   };
 }
 
-module.exports = UserController;
+module.exports = RealManager;
