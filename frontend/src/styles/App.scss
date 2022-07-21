@@ -9,7 +9,7 @@ section > div {
   background-color: $light-background;
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
-  padding: 5px;
+  // padding: 5px;
 }
 
 @media screen and (min-width: 500px) {
@@ -22,6 +22,21 @@ section > div {
       min-height: calc(100vh - $header-height-desktop - $footer-height);
     }
   }
+}
+
+h2 {
+  background-color: $primary-dark;
+  font-family: "BebasRegular";
+  font-size: 32px;
+  padding: 5px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 24px;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
 // CUSTOM BUTTON
@@ -38,6 +53,7 @@ button {
   cursor: pointer;
   transition: filter 0.2s ease-in-out;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  user-select: none;
 }
 
 button:hover {

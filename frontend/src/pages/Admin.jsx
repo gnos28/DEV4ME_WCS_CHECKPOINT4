@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
+import RealCardAdmin from "../components/RealCardAdmin";
+import RealModalAdmin from "../components/RealModalAdmin";
 import userAPI from "../services/userAPI";
 import "../styles/Admin.scss";
-import bin from "../assets/bin.png";
-import edit from "../assets/edit.png";
 import add from "../assets/add.webp";
 
 export default function Admin() {
   const [reals, setReals] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [modalReal, setModalReal] = useState(false);
 
   const getReal = async () => {
-    setReals((await userAPI.get("/real")).data);
-  };
-
-  const addReal = () => {
-    console.log("add");
-  };
-
-  const editReal = (id) => {
-    console.log(id);
-  };
-
-  const deleteReal = (id) => {
-    console.log(id);
+    setReals((await userAPI.get("/superReal")).data);
+    setTags((await userAPI.get("/tag")).data);
   };
 
   useEffect(() => {
@@ -34,35 +25,26 @@ export default function Admin() {
       <h3>Liste des réalisations</h3>
       {reals.length &&
         reals.map((real) => (
-          <div key={real.id} className="admin-realItem">
-            <div>
-              <span>{real.id}</span>
-              <span>{real.titre}</span>
-            </div>
-
-            <div>
-              <img
-                src={edit}
-                alt="edit"
-                draggable={false}
-                onClick={() => editReal(real.id)}
-              />
-              <img
-                src={bin}
-                alt="delete"
-                draggable={false}
-                onClick={() => deleteReal(real.id)}
-              />
-            </div>
-          </div>
+          <RealCardAdmin
+            key={real.id}
+            real={real}
+            setModalReal={setModalReal}
+          />
         ))}
       <img
         className="admin-addIcon"
         src={add}
         alt="add"
         draggable={false}
-        onClick={() => addReal()}
+        onClick={() => setModalReal("new")}
       />
+      {modalReal && (
+        <RealModalAdmin
+          real={modalReal}
+          setModalReal={setModalReal}
+          tagList={tags}
+        />
+      )}{" "}
     </div>
   );
 }

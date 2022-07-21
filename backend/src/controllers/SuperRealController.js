@@ -1,28 +1,66 @@
 const models = require("../models");
 
 class SuperRealManager {
-  static browse = (req, res) => {
-    models.real
-      .findAll()
-      .then(([rows]) => {
-        res.send(rows);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
+  static browse = async (req, res) => {
+    try {
+      const [reals] = await models.real.findAll();
+      const [tags] = await models.tag.findAll();
+      const [tagReals] = await models.tag_real.findAll();
+      const [medias] = await models.media.findAll();
+
+      const superReals = reals.map((real) => ({
+        ...real,
+        tags: tagReals
+          .filter((tagreal) => tagreal.real_id === real.id)
+          .map((tagreal) => tagreal.tag_id)
+          .map(
+            (tagId) =>
+              tags
+                .filter((tag) => tag.id === tagId)
+                .map((tag) => ({
+                  nom: tag.nom,
+                  picture_path: tag.picture_path,
+                }))[0]
+          ),
+        medias: medias.filter((media) => media.real_id === real.id),
+      }));
+
+      res.send(superReals);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
+    }
   };
 
-  static read = (req, res) => {
-    models.real
-      .find(req.params.id)
-      .then(([rows]) => {
-        res.send(rows);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
+  static read = async (req, res) => {
+    try {
+      const [reals] = await models.real.find(req.params.id);
+      const [tags] = await models.tag.findAll();
+      const [tagReals] = await models.tag_real.findAll();
+      const [medias] = await models.media.findAll();
+
+      const superReals = reals.map((real) => ({
+        ...real,
+        tags: tagReals
+          .filter((tagreal) => tagreal.real_id === real.id)
+          .map((tagreal) => tagreal.tag_id)
+          .map(
+            (tagId) =>
+              tags
+                .filter((tag) => tag.id === tagId)
+                .map((tag) => ({
+                  nom: tag.nom,
+                  picture_path: tag.picture_path,
+                }))[0]
+          ),
+        medias: medias.filter((media) => media.real_id === real.id),
+      }));
+
+      res.send(superReals);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
+    }
   };
 
   static add = (req, res) => {

@@ -27,6 +27,8 @@ class MediaManager {
 
   static add = (req, res) => {
     const newMedia = req.body;
+    const newFile = req.file;
+    newMedia.path = newFile.filename;
 
     const validationErrors = models.media.validate(newMedia);
     if (validationErrors) {
@@ -46,6 +48,7 @@ class MediaManager {
     return true;
   };
 
+  // should also update file on /uploads
   static modify = async (req, res) => {
     const newMedia = req.body;
 
@@ -65,6 +68,7 @@ class MediaManager {
     }
   };
 
+  // should also delete file on /uploads
   static delete = async (req, res) => {
     models.media
       .delete(req.params.id)
