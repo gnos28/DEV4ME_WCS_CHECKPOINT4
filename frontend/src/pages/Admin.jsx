@@ -43,6 +43,7 @@ export default function Admin() {
           real={modalReal}
           setModalReal={setModalReal}
           tagList={tags}
+          setReals={setReals}
         />
       )}{" "}
     </div>

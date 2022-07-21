@@ -7,7 +7,12 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import "../styles/RealModalAdmin.scss";
 import bin from "../assets/bin.png";
 
-export default function RealModalAdmin({ real, setModalReal, tagList }) {
+export default function RealModalAdmin({
+  real,
+  setModalReal,
+  tagList,
+  setReals,
+}) {
   const [titre, setTitre] = useState(
     typeof real === "string" ? "" : real.titre
   );
@@ -21,20 +26,71 @@ export default function RealModalAdmin({ real, setModalReal, tagList }) {
   );
   const [photo, setPhoto] = useState("");
 
-  console.log(real);
+  const updateReal = async () => {
+    try {
+      const answer = (
+        await userAPI.put(`/superReal/${real.id}`, {
+          titre,
+          link,
+          description,
+          tags,
+        })
+      ).data;
 
-  const updateReal = () => {};
-  const createReal = () => {};
-  const deleteReal = () => {};
-  const deleteMedia = () => {};
+      setReals((await userAPI.get("/superReal")).data);
+
+      toast.success("Mise à jour OK");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de la mise à jour");
+    }
+  };
+
+  const createReal = async () => {
+    try {
+      const answer = (
+        await userAPI.post(`/superReal`, {
+          titre,
+          link,
+          description,
+          tags,
+        })
+      ).data;
+
+      const updatedReals = (await userAPI.get("/superReal")).data;
+
+      setReals(updatedReals);
+      setModalReal(updatedReals.filter((real) => real.id === answer.id)[0]);
+
+      toast.success("Mise à jour OK");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de la mise à jour");
+    }
+  };
+  const deleteReal = async () => {
+    await userAPI.delete(`/superReal/${real.split("_")[1]}`);
+    setReals((await userAPI.get("/superReal")).data);
+    setModalReal(false);
+  };
+
+  const deleteMedia = async (mediaId) => {
+    try {
+      await userAPI.delete(`/media/${mediaId}`);
+      toast.success("Mise à jour OK");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erreur lors de la mise à jour");
+    }
+  };
 
   const postMedia = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", photo[0]);
-    formData.append("real_id", real.id);
-
     try {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("file", photo[0]);
+      formData.append("real_id", real.id);
+
       const answer = (
         await userAPI.post(`/media`, formData, {
           headers: {
@@ -42,8 +98,6 @@ export default function RealModalAdmin({ real, setModalReal, tagList }) {
           },
         })
       ).data;
-
-      console.log("answer", answer);
 
       setMedias([
         ...medias,
@@ -58,12 +112,6 @@ export default function RealModalAdmin({ real, setModalReal, tagList }) {
       toast.error("Erreur lors de l'upload du média");
     }
   };
-
-  useEffect(() => {
-    console.log("photo", photo);
-    console.log("real", real);
-    console.log("medias", medias);
-  });
 
   return (
     <div
@@ -131,8 +179,6 @@ export default function RealModalAdmin({ real, setModalReal, tagList }) {
               id={`tags_${real.id}`}
               placeholder="Sélectionnez un tag"
               onChange={(text) => {
-                console.log("onChange", text);
-
                 setTags(
                   text.map((txt) => tagList.filter((tag) => tag.nom === txt)[0])
                 );
@@ -152,44 +198,47 @@ export default function RealModalAdmin({ real, setModalReal, tagList }) {
                   />
                 ))}
             </div>
+            {real !== "new" && (
+              <>
+                <span>Médias</span>
 
-            <span>Médias</span>
+                <form onSubmit={postMedia}>
+                  <input
+                    type="file"
+                    name="picture_name"
+                    onChange={(e) => setPhoto(e.target.files)}
+                  />
+                  {photo && (
+                    <button type="submit" className="uploadMedia">
+                      Uploader
+                    </button>
+                  )}
+                </form>
 
-            <form onSubmit={postMedia}>
-              <input
-                type="file"
-                name="picture_name"
-                onChange={(e) => setPhoto(e.target.files)}
-              />
-              {photo && (
-                <button type="submit" className="uploadMedia">
-                  Uploader
-                </button>
-              )}
-            </form>
-
-            <div className="mediaContainer">
-              {medias &&
-                medias.map((media) => (
-                  <div key={media.id} className="mediaCard">
-                    <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
-                        media.path
-                      }`}
-                      alt={media.path}
-                      className="mediaImg"
-                      draggable={false}
-                    />
-                    <img
-                      src={bin}
-                      alt="delete"
-                      draggable={false}
-                      onClick={() => deleteMedia(media.id)}
-                      className="mediaBin"
-                    />
-                  </div>
-                ))}
-            </div>
+                <div className="mediaContainer">
+                  {medias &&
+                    medias.map((media) => (
+                      <div key={media.id} className="mediaCard">
+                        <img
+                          src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                            media.path
+                          }`}
+                          alt={media.path}
+                          className="mediaImg"
+                          draggable={false}
+                        />
+                        <img
+                          src={bin}
+                          alt="delete"
+                          draggable={false}
+                          onClick={() => deleteMedia(media.id)}
+                          className="mediaBin"
+                        />
+                      </div>
+                    ))}
+                </div>
+              </>
+            )}
           </>
         )}
 

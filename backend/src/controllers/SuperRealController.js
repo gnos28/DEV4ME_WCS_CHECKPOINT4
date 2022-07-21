@@ -63,47 +63,107 @@ class SuperRealManager {
     }
   };
 
-  static add = (req, res) => {
-    const newReal = req.body;
+  static add = async (req, res) => {
+    try {
+      const newReal = req.body;
+      const newTags = req.body.tags;
 
-    const validationErrors = models.real.validate(newReal);
-    if (validationErrors) {
-      console.error(validationErrors);
-      return res.status(422).json({ validationErrors });
+      delete newReal.tags;
+      const [result] = await models.real.insert(newReal);
+      const [allTags] = await models.tag.findAll();
+
+      const newTagsId = newTags
+        .map((newTag) => newTag.nom)
+        .map(
+          (newTagName) => allTags.filter((tag) => tag.nom === newTagName)[0].id
+        );
+
+      newTagsId.map(async (tagId) =>
+        models.tag_real.insert({
+          tag_id: tagId,
+          real_id: result.insertId,
+        })
+      );
+
+      const validationErrors = models.real.validate(newReal);
+      if (validationErrors) {
+        console.error(validationErrors);
+        return res.status(422).json({ validationErrors });
+      }
+
+      res.status(201).send({ ...newReal, id: result.insertId });
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
     }
-
-    models.real
-      .insert(newReal)
-      .then(([result]) => {
-        res.status(201).send({ ...newReal, id: result.insertId });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-    return true;
+    return false;
   };
 
   static modify = async (req, res) => {
-    const newReal = req.body;
+    try {
+      const newReal = req.body;
+      const newTags = req.body.tags;
 
-    const validationErrors = models.real.validate(newReal, false);
-    if (validationErrors) res.status(422).json({ validationErrors });
-    else {
-      models.real
-        .update(newReal, req.params.id)
-        .then(([result]) => {
-          if (result.affectedRows === 0) throw new Error("no change affected");
-          res.status(201).send({ ...newReal });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.sendStatus(500);
-        });
+      delete newReal.tags;
+
+      const [allTags] = await models.tag.findAll();
+      const [tagReals] = await models.tag_real.findAll();
+
+      const newTagsId = newTags
+        .map((newTag) => newTag.nom)
+        .map(
+          (newTagName) => allTags.filter((tag) => tag.nom === newTagName)[0].id
+        );
+
+      // nouveaux tags
+      newTagsId
+        .filter(
+          (tagId) =>
+            tagReals.filter(
+              (tr) =>
+                tr.tag_id === tagId &&
+                tr.real_id === parseInt(req.params.id, 10)
+            ).length === 0
+        )
+        .map(async (tagId) =>
+          models.tag_real.insert({
+            tag_id: tagId,
+            real_id: parseInt(req.params.id, 10),
+          })
+        );
+
+      // tags effacés
+      tagReals
+        .filter((tr) => tr.real_id === parseInt(req.params.id, 10))
+        .filter((tr) => !newTagsId.includes(tr.tag_id))
+        .map(async (tr) => models.tag_real.delete(tr.id));
+
+      const validationErrors = models.real.validate(newReal, false);
+      if (validationErrors) res.status(422).json({ validationErrors });
+      else {
+        const [result] = await models.real.update(newReal, req.params.id);
+
+        if (result.affectedRows === 0) throw new Error("no change affected");
+        res.status(201).send({ ...newReal });
+      }
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
     }
   };
 
   static delete = async (req, res) => {
+    const [tagReals] = await models.tag_real.findAll();
+    const [medias] = await models.media.findAll();
+
+    await tagReals
+      .filter((tr) => tr.real_id === parseInt(req.params.id, 10))
+      .map(async (tr) => models.tag_real.delete(tr.id));
+
+    await medias
+      .filter((media) => media.real_id === parseInt(req.params.id, 10))
+      .map(async (media) => models.media.delete(media.id));
+
     models.real
       .delete(req.params.id)
       .then(() => {
