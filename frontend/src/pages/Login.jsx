@@ -15,7 +15,7 @@ export default function Login() {
 
     if (email && password) {
       userAPI
-        .post("/api/auth/login", { email, password })
+        .post("/auth/login", { email, password })
         .then((res) => {
           toast.success("Vous êtes connecté !");
           localStorage.setItem("user", JSON.stringify(res.data));
@@ -36,7 +36,7 @@ export default function Login() {
 
   const handleDisconnect = () => {
     userAPI
-      .get("/api/auth/logout")
+      .get("/auth/logout")
       .then(() => {
         localStorage.clear();
         setUser({});

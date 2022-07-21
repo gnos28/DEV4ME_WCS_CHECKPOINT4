@@ -33,13 +33,15 @@ const tagRouter = require("./routes/tagRouter");
 const tagRealRouter = require("./routes/tagRealRouter");
 const mediaRouter = require("./routes/mediaRouter");
 const authRouter = require("./routes/authRouter");
+const superReal = require("./routes/superRealRouter");
 
-router.use("/user", auth, userRouter);
-router.use("/real", auth, realRouter);
-router.use("/tag", auth, tagRouter);
-router.use("/tagreal", auth, tagRealRouter);
-router.use("/media", auth, mediaRouter);
+router.use("/user", userRouter);
+router.use("/real", realRouter);
+router.use("/tag", tagRouter);
+router.use("/tagreal", tagRealRouter);
+router.use("/media", mediaRouter);
 router.use("/auth", authRouter);
+router.use("/superReal", superRealRouter);
 
 // API routes
 app.use("/api", router);
