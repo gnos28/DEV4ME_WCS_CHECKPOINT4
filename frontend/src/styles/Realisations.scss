@@ -1,0 +1,37 @@
+@import "./_variables.scss";
+
+.realisations {
+  padding: 20px;
+  .realCard-container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(
+      auto-fill,
+      min(calc((100vw - 40px - 10px) / 2), 200px)
+    );
+    gap: 10px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .realisations {
+    .realCard-container {
+      grid-template-columns: repeat(
+        auto-fill,
+        min(calc((100vw - $navbar-width-desktop - 40px - 10px) / 2), 250px)
+      );
+    }
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .realisations {
+    .realCard-container {
+      grid-template-columns: repeat(
+        auto-fill,
+        min(calc((100vw - $navbar-width-desktop - 40px - 20px) / 3), 300px)
+      );
+    }
+  }
+}

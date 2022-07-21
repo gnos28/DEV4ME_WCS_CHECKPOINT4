@@ -9,7 +9,7 @@ class RealManager extends AbstractManager {
 
     const joiObject = {
       titre: Joi.string().max(255).presence(this.presence),
-      link: Joi.string().max(255).presence(this.presence),
+      link: Joi.string().min(0).max(255).presence("optional"),
       description: Joi.string().max(255).presence(this.presence),
     };
 
