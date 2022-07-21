@@ -1,7 +1,6 @@
 .path {
   // margin: 5px;
   display: flex;
-
   a {
     text-decoration: none;
     color: black;
@@ -9,13 +8,15 @@
 
   a:hover {
     text-decoration: underline;
+    color: black;
   }
 
   h1,
   span {
-    margin-left: 5px;
+    margin: 0 0 0 5px;
     font-family: "BebasRegular";
     font-size: 20px;
+    line-height: 1;
   }
 }
 

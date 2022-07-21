@@ -8,6 +8,7 @@ nav.navbar {
   height: $navbar-height-mobile;
   display: flex;
   align-items: center;
+  user-select: none;
 
   & a > img {
     height: clamp(25px, 9vw, $navbar-height-mobile);

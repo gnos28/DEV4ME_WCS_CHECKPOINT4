@@ -13,10 +13,10 @@
   }
 
   .admin-realItem {
-    margin-top: 20px;
+    margin: 5px 10px;
     padding: 5px;
     background-color: $primary-light;
-    width: 100%;
+    width: calc(100% - 20px);
     display: flex;
     align-items: center;
     justify-content: space-between;

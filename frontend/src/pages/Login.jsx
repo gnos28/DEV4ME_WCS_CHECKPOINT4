@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import pathContext from "../contexts/pathContext";
 import userAPI from "../services/userAPI";
 import "../styles/Login.scss";
 
@@ -8,6 +9,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState({});
+  const { setPaths } = useContext(pathContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -20,6 +22,7 @@ export default function Login() {
           toast.success("Vous êtes connecté !");
           localStorage.setItem("user", JSON.stringify(res.data));
           setUser(res.data);
+          setPaths([{ display: "admin", route: "/admin" }]);
           navigate("/admin");
         })
         .catch(() =>
@@ -60,7 +63,7 @@ export default function Login() {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form autocomplete="off" onSubmit={handleSubmit}>
           <div>
             <input
               type="text"

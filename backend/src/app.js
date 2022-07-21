@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const auth = require("./middlewares/auth");
 require("dotenv").config();
 
 const app = express();
@@ -33,7 +32,7 @@ const tagRouter = require("./routes/tagRouter");
 const tagRealRouter = require("./routes/tagRealRouter");
 const mediaRouter = require("./routes/mediaRouter");
 const authRouter = require("./routes/authRouter");
-const superReal = require("./routes/superRealRouter");
+const superRealRouter = require("./routes/superRealRouter");
 
 router.use("/user", userRouter);
 router.use("/real", realRouter);
