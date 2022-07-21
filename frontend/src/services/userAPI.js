@@ -5,7 +5,7 @@ if (import.meta.env.VITE_BACKEND_URL)
   baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const instance = axios.create({
-  baseURL: baseUrl,
+  baseURL: baseUrl + "/api",
   withCredentials: true,
 });
 
