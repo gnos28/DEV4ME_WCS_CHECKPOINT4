@@ -68,6 +68,7 @@ export default function RealModalAdmin({
       toast.error("Erreur lors de la mise à jour");
     }
   };
+
   const deleteReal = async () => {
     await userAPI.delete(`/superReal/${real.split("_")[1]}`);
     setReals((await userAPI.get("/superReal")).data);

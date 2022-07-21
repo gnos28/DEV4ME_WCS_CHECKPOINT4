@@ -10,14 +10,18 @@ nav.navbar {
   align-items: center;
   user-select: none;
 
-  & a > img {
+  & a img {
     height: clamp(25px, 9vw, $navbar-height-mobile);
     filter: grayscale(0.6);
     margin: 0 5px;
   }
 
-  & a > img:hover {
+  & a img:hover {
     filter: grayscale(0.2);
+  }
+
+  & a img.active {
+    filter: grayscale(0);
   }
 }
 
@@ -32,10 +36,8 @@ nav.navbar {
     flex-direction: column;
     justify-content: center;
     gap: 20px;
-    // box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    //   rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 
-    & a > img {
+    & a img {
       height: 50px;
     }
   }
