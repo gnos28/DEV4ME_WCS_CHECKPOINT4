@@ -1,6 +1,7 @@
 .path {
   // margin: 5px;
   display: flex;
+  align-items: center;
   a {
     text-decoration: none;
     color: black;
@@ -22,9 +23,13 @@
 
 @media screen and (min-width: 500px) {
   .path {
-    h1,
-    span {
+    h1 {
       font-size: 40px;
+      margin-left: 10px;
+    }
+
+    span {
+      font-size: clamp(10px, 3.5vw, 40px);
       margin-left: 10px;
     }
   }
