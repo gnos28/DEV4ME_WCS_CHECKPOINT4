@@ -19,9 +19,11 @@ exports.login = (req, res) => {
             delete userAnswer.password_hash;
             const token = encodeJwt(userAnswer);
             res.cookie("token", token, { httpOnly: true, secure: false });
-            res
-              .status(200)
-              .json({ id: userAnswer.id, email: userAnswer.email });
+            res.status(200).json({
+              id: userAnswer.id,
+              email: userAnswer.email,
+              is_admin: userAnswer.is_admin,
+            });
           } else {
             res.status(401).send("Invalid credentials");
           }
