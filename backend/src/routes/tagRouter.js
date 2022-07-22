@@ -5,7 +5,7 @@ const TagController = require("../controllers/TagController");
 
 const router = express.Router();
 
-router.get("/", auth, isAdmin, TagController.browse);
+router.get("/", TagController.browse);
 router.get("/:id", auth, isAdmin, TagController.read);
 router.post("/", auth, isAdmin, TagController.add);
 router.put("/:id", auth, isAdmin, TagController.modify);
