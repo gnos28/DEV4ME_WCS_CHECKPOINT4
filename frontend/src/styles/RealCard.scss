@@ -1,5 +1,14 @@
 @import "./_variables.scss";
 
+@keyframes cardEnter {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .realCard {
   position: relative;
   width: min(calc((100vw - 40px - 10px) / 2), 200px);

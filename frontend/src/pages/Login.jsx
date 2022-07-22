@@ -2,13 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import pathContext from "../contexts/pathContext";
+import userContext from "../contexts/userContext";
 import userAPI from "../services/userAPI";
 import "../styles/Login.scss";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
+  const { user, setUser } = useContext(userContext);
   const { setPaths } = useContext(pathContext);
   const navigate = useNavigate();
 
@@ -63,7 +65,7 @@ export default function Login() {
           </button>
         </div>
       ) : (
-        <form autocomplete="off" onSubmit={handleSubmit}>
+        <form autoComplete="off" onSubmit={handleSubmit}>
           <div>
             <input
               type="text"
