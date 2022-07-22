@@ -29,7 +29,7 @@ CREATE TABLE `media` (
   PRIMARY KEY (`id`),
   KEY `real_id` (`real_id`),
   CONSTRAINT `media_ibfk_1` FOREIGN KEY (`real_id`) REFERENCES `real` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `media` (
 
 LOCK TABLES `media` WRITE;
 /*!40000 ALTER TABLE `media` DISABLE KEYS */;
+INSERT INTO `media` VALUES (8,'1658421371235_canvas_shooter_zoom.png',2),(9,'1658434257244_02f5f044-6381-4249-946f-7f2f36875175.undefined',7),(13,'1658435618421_hvp.jpeg',10),(14,'1658436340009_apside.png',11),(15,'1658436486538_crypto.webp',12),(16,'1658469303039_11751167-701a-42b3-ae3e-0b06abc952ab_(1).gif',11),(17,'1658480278420_canvas_shooter_2.jpeg',2),(18,'1658481310256_2fe8ed73-64bc-4575-8f4a-4b8e07706e1e.webp',10);
 /*!40000 ALTER TABLE `media` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,7 +55,7 @@ CREATE TABLE `real` (
   `link` varchar(255) DEFAULT NULL,
   `description` varchar(4096) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,6 +64,7 @@ CREATE TABLE `real` (
 
 LOCK TABLES `real` WRITE;
 /*!40000 ALTER TABLE `real` DISABLE KEYS */;
+INSERT INTO `real` VALUES (2,'canvas shooter','https://pixelatwork.fr/vignos','Le shoot em up ultime !\nR├⌐alis├⌐ en 2 semaines lors de mes premiers balbutiements de d├⌐veloppeurs web.\nUtilise la balise <canvas> et de l\'huile de coude.\nL\'intelligence artificielle est progressive, arriverez vous ├á battre le boss ?'),(7,'API NASA','','r├⌐cup├⌐ration de la position des satellites en temps r├⌐el (3D avec three.js)'),(10,'Human vs Planet','https://hvp.dev4.me/','projet r├⌐alis├⌐ en 24h dans le cadre du 1er hackathon de la Wild Code School\n1er prix du hackathon !'),(11,'Apsidea','','Hackathon #2 de la Wild Code School\n1er prix (p├⌐rim├¿tre Europe)'),(12,'cryptos','https://docs.google.com/spreadsheets/d/1Gz-DA4C_zjc811DP4N5ktbGDlCTTh2XrB433R_R8fdU','connexion API coinmarketcap pour analyses cryptos');
 /*!40000 ALTER TABLE `real` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,7 +80,7 @@ CREATE TABLE `tag` (
   `nom` varchar(64) DEFAULT NULL,
   `picture_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,6 +89,7 @@ CREATE TABLE `tag` (
 
 LOCK TABLES `tag` WRITE;
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
+INSERT INTO `tag` VALUES (2,'bootstrap','bootstrap.svg'),(3,'javascript','js.svg'),(4,'react','react.svg'),(5,'css','css.svg'),(6,'express','express.svg'),(7,'google apps script','gas.png'),(8,'google cloud','gcloud.svg'),(9,'git','git.svg'),(10,'html','html.svg'),(11,'mysql','mysql.svg'),(12,'node.js','node.svg'),(13,'sass','sass.svg'),(14,'D3.js','d3.png');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,7 +109,7 @@ CREATE TABLE `tag_real` (
   KEY `real_id` (`real_id`),
   CONSTRAINT `tag_real_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`),
   CONSTRAINT `tag_real_ibfk_2` FOREIGN KEY (`real_id`) REFERENCES `real` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,6 +118,7 @@ CREATE TABLE `tag_real` (
 
 LOCK TABLES `tag_real` WRITE;
 /*!40000 ALTER TABLE `tag_real` DISABLE KEYS */;
+INSERT INTO `tag_real` VALUES (8,10,2),(9,5,2),(10,3,2),(16,3,7),(17,4,7),(18,12,7),(19,6,7),(20,5,7),(21,10,7),(22,11,7),(23,13,7),(33,3,10),(34,4,10),(35,6,10),(36,12,10),(37,5,10),(38,10,10),(39,9,10),(40,11,10),(41,13,10),(42,3,11),(43,4,11),(44,5,11),(45,6,11),(46,10,11),(47,9,11),(48,11,11),(49,12,11),(50,13,11),(51,3,12),(52,7,12),(53,14,11);
 /*!40000 ALTER TABLE `tag_real` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,4 +159,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-20 17:23:06
+-- Dump completed on 2022-07-22 11:32:23
