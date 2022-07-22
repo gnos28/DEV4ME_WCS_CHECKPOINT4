@@ -1,0 +1,36 @@
+.path {
+  // margin: 5px;
+  display: flex;
+  align-items: center;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    color: black;
+  }
+
+  h1,
+  span {
+    margin: 0 0 0 5px;
+    font-family: "BebasRegular";
+    font-size: 20px;
+    line-height: 1;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .path {
+    h1 {
+      font-size: 40px;
+      margin-left: 10px;
+    }
+
+    span {
+      font-size: clamp(10px, 3.5vw, 40px);
+      margin-left: 10px;
+    }
+  }
+}

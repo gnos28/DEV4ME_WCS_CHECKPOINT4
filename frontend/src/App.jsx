@@ -1,44 +1,45 @@
-import { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Realisations from "./pages/Realisations";
+import Real from "./pages/Real";
+import Technos from "./pages/Technos";
+import Team from "./pages/Team";
+import ContactUs from "./pages/ContactUs";
+import Login from "./pages/Login";
+import Admin from "./pages/Admin";
+import Footer from "./components/Footer";
+import { PathContextProvider } from "./contexts/pathContext";
+import { UserContextProvider } from "./contexts/userContext";
+import "react-toastify/dist/ReactToastify.css";
+import "./styles/App.scss";
 
 const App = () => {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <UserContextProvider>
+      <PathContextProvider>
+        <div className="App">
+          <Header />
+          <Navbar />
+          <section>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/real" element={<Realisations />} />
+              <Route path="/real/:id" element={<Real />} />
+              <Route path="/tech" element={<Technos />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </section>
+          <Footer />
+        </div>
+        <ToastContainer pauseOnHover position="bottom-right" autoClose={1000} />
+      </PathContextProvider>
+    </UserContextProvider>
   );
 };
 

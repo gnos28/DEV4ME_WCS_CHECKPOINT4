@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const auth = require("./middlewares/auth");
 require("dotenv").config();
 
 const app = express();
@@ -28,8 +27,20 @@ app.use(express.static(path.join(__dirname, "..", "..", "frontend", "dist")));
 
 const router = express.Router();
 const userRouter = require("./routes/userRouter");
+const realRouter = require("./routes/realRouter");
+const tagRouter = require("./routes/tagRouter");
+const tagRealRouter = require("./routes/tagRealRouter");
+const mediaRouter = require("./routes/mediaRouter");
+const authRouter = require("./routes/authRouter");
+const superRealRouter = require("./routes/superRealRouter");
 
-router.use("/user", auth, userRouter);
+router.use("/user", userRouter);
+router.use("/real", realRouter);
+router.use("/tag", tagRouter);
+router.use("/tagreal", tagRealRouter);
+router.use("/media", mediaRouter);
+router.use("/auth", authRouter);
+router.use("/superReal", superRealRouter);
 
 // API routes
 app.use("/api", router);
